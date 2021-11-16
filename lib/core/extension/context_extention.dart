@@ -48,8 +48,8 @@ extension PaddingExtensionSymetric on BuildContext {
 }
 
 extension DurationExtension on BuildContext {
-  Duration get lowDuration => Duration(milliseconds: 500);
-  Duration get normalDuration => Duration(seconds: 1);
+  Duration get lowDuration => const Duration(milliseconds: 500);
+  Duration get normalDuration => const Duration(seconds: 1);
 }
 
 extension SizedBoxExtension on BuildContext {
