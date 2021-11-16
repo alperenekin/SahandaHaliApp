@@ -10,6 +10,7 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      validator: (value) => (value ?? '').length > 6 ? null : 'must be longer than 6 chars',
       controller: controller,
       decoration: InputDecoration(
         prefixIcon: Icon(textIcon ?? Icons.mail,color: customColor ?? Colors.white),
