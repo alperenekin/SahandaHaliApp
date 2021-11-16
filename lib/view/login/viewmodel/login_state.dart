@@ -4,7 +4,8 @@ part of 'login_cubit.dart';
 abstract class LoginState {}
 
 class LoginInitial extends LoginState {
-  LoginState(){}
+  final bool isPasswordVisible;
+  LoginInitial(this.isPasswordVisible);
 }
 
 class LoginLoadingState extends LoginState{

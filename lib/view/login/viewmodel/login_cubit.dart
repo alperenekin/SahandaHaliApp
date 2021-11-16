@@ -12,27 +12,31 @@ class LoginCubit extends Cubit<LoginState> {
   final TextEditingController _emailController;
   final TextEditingController _passwordController;
   final GlobalKey<FormState> _formKey;
-  
+  bool isVisible = false;
   final LoginService loginService;
 
-  LoginCubit(this._emailController, this._passwordController, this._formKey, this.loginService) : super(LoginInitial());
+  LoginCubit(this._emailController, this._passwordController, this._formKey, this.loginService) : super(LoginInitial(false));
 
   Future<void> loginUser() async {
-
-  if(_formKey.currentState != null && _formKey.currentState!.validate()){
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       emit(LoginLoadingState());
-      LoginRequest loginRequest = LoginRequest(email: _emailController.text.trim(), password: _passwordController.text.trim());
+      LoginRequest loginRequest = LoginRequest(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim());
       LoginResponse? response = await loginService.postUser(loginRequest);
-      if(response != null){
+      if (response != null) {
         emit(LoginCompleteState(response));
-      }else{
+      } else {
         emit(LoginFailedState('Username or password is wrong'));
       }
-
-    }else{
+    } else {
       emit(LoginFailedState('Input is invalid'));
     }
   }
 
+  void changePasswordVisibility(){
+    isVisible = !isVisible;
+    emit(LoginInitial(isVisible));
+  }
 }
 

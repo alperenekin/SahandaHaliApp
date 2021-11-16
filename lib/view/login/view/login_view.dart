@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahanda_hali/core/components/textfield/custom_textformfield.dart';
-import 'package:sahanda_hali/view/login/service/Ilogin_service.dart';
 import 'package:sahanda_hali/view/login/service/login_service.dart';
+import 'package:sahanda_hali/view/login/view/login_detail.dart';
 import 'package:sahanda_hali/view/login/viewmodel/login_cubit.dart';
 import 'package:sahanda_hali/core/extension/context_extention.dart';
 
@@ -39,15 +39,18 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          LoginCubit(emailController, passwordController, formKey, LoginService(Dio(BaseOptions(baseUrl: 'https://reqres.in')))),
+      create: (context) => LoginCubit(
+          emailController,
+          passwordController,
+          formKey,
+          LoginService(Dio(BaseOptions(baseUrl: 'https://reqres.in')))),
       child: Scaffold(
         body: BlocConsumer<LoginCubit, LoginState>(
           listener: (context, state) {
-            if(state is LoginCompleteState){
-              print(state.response.token);
-            }
-            else if(state is LoginFailedState){
+            if (state is LoginCompleteState) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => LoginDetail(state.response)));
+            } else if (state is LoginFailedState) {
               final snackBar = SnackBar(content: Text(state.message));
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             }
@@ -135,11 +138,15 @@ class _LoginViewState extends State<LoginView> {
     return Padding(
       padding: context.paddingHighHorizontal,
       child: CustomTextFormField(
-        controller: passwordController,
-        customColor: Colors.green.shade900,
-        labelText: 'Password',
-        textIcon: Icons.vpn_key,
-      ),
+          controller: passwordController,
+          customColor: Colors.green.shade900,
+          labelText: 'Password',
+          textIcon: Icons.vpn_key,
+          suffixIcon: Icons.remove_red_eye,
+          isObsecure: context.read<LoginCubit>().isVisible,
+          onIconPress: () {
+            context.read<LoginCubit>().changePasswordVisibility();
+          }),
     );
   }
 }
