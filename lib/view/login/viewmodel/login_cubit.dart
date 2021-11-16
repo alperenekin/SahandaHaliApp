@@ -11,5 +11,9 @@ class LoginCubit extends Cubit<LoginState> {
 
   LoginCubit(this.emailController, this.passwordController, this.formKey) : super(LoginInitial());
 
+  void loginUser(){
+
+  }
+
 }
 
